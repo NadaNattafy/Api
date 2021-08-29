@@ -32,6 +32,8 @@ class PassportAuthController extends Controller
      */
     public function login(Request $request)
     {
+        $request->validate([   'email'=>'required|email']);
+
         $data = [
             'email' => $request->email,
             'password' => $request->password
@@ -63,4 +65,4 @@ class PassportAuthController extends Controller
         return response()->json(["status" => "failed", "error" => true, "message" => "Failed! You are already logged out."], 403);
     }
 }
-}
+
