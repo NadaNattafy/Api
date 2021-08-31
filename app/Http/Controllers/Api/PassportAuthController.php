@@ -15,12 +15,12 @@ class PassportAuthController extends Controller
      */
     public function register(StoreRequest $request)
     {
-
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password)
         ]);
+        $user->hasVerifiedEmail();
 
         $token = $user->createToken('Laravel8PassportAuth')->accessToken;
 

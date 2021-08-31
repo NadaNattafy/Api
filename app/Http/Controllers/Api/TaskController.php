@@ -20,8 +20,8 @@ class TaskController extends Controller
         $tasks = array();
         $user = Auth::user();
         $tasks = $user->tasks;
-        $total = $tasks->count();
-        $success = ($tasks->where('status', 'success')->count() / $total) * 100;
+        $total = $user->tasks()->count();
+        $success = round (($user->tasks()->where('status', 'success')->count() / $total) * 100,2);
 
         return response()->json(['data' => TaskResource::collection($tasks),'percentage' =>$success . '%']);
     }
@@ -29,14 +29,9 @@ class TaskController extends Controller
     //Create And Store Task
     public function store(StoreRequest $request)
     {
+        $inputs=$request->validated();
         $user = Auth::user();
-
-        $task_array  = [
-            "name" => $request->name,
-            "status" => $request->status,
-            "user_id" => $user->id
-        ];
-        $task = Task::create($task_array);
+       $task= $user->tasks()->create($inputs);
         return response()->json(["status" => $this->sucess_status, "success" => true, "data" => $task]);
     }
 
@@ -65,21 +60,4 @@ class TaskController extends Controller
         $task->delete();
         return response()->json(["status" => $this->sucess_status, "success" => true, "message" => "Success! todo deleted"]);
     }
-
-    // //Count Task
-    // public function taskCount()
-    // {
-    //     $tasks = Task::all();
-
-    //     $total = $tasks->count();
-
-    //     $success = ($tasks->where('status', 'success')->count() / $total) * 100;
-
-    //     $data = [
-    //         'total' => $total,
-    //         'success' => $success . '%'
-    //     ];
-
-    //     return response()->json($data);
-    // }
 }

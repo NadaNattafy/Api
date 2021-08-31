@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,5 +33,11 @@ Route::middleware('auth:api')->group(function () {
 
     Route::resource('tasks', TaskController::class);
 
-    Route::get("count", [TaskController::class,'taskCount']);
+    Route::get("count", [TaskController::class, 'taskCount']);
 });
+
+Route::resource('image', ImageController::class);
+
+Route::get('/email/verify', function () {
+    return view('auth.verify-email');
+})->middleware('auth')->name('verification.notice');
