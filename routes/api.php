@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Support\Facades\Route;
 
+
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -38,6 +40,6 @@ Route::middleware('auth:api')->group(function () {
 
 Route::resource('image', ImageController::class);
 
-Route::get('/email/verify', function () {
-    return view('auth.verify-email');
-})->middleware('auth')->name('verification.notice');
+Route::get('email/verify/{id}', [VerificationController::class ,'verify'])->name('verification.verify');
+
+Route::get('email/resend', [VerificationController::class , 'resend'])->name('verification.resend');

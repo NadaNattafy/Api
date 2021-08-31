@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Passport\StoreRequest;
-
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use App\Models\User;
 
@@ -15,6 +15,7 @@ class PassportAuthController extends Controller
      */
     public function register(StoreRequest $request)
     {
+       // User::create($request->getAttributes())->sendEmailVerificationNotification();
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -23,6 +24,7 @@ class PassportAuthController extends Controller
         $user->hasVerifiedEmail();
 
         $token = $user->createToken('Laravel8PassportAuth')->accessToken;
+        event(new Registered($user));
 
         return response()->json(['token' => $token], 200);
     }

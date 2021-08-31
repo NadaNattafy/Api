@@ -7,11 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 //use Laravel\Sanctum\HasApiTokens;
+use App\Traits\passwordTrait;
 use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
+    use passwordTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -19,12 +21,9 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'first_name',
-         'last_name',
-          'full_name',
-          'phone',
-          'email',
-          'password',
+        'name',
+        'email',
+        'password',
     ];
 
     /**
@@ -48,11 +47,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function tasks()
     {
-         return $this->hasMany(Task::class);
-    }
-
-    public function validateForPassportPasswordGrant($password)
-    {
-        return Hash::check($password, $this->password);
+        return $this->hasMany(Task::class);
     }
 }
